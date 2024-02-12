@@ -1,7 +1,6 @@
 import NextAuth, { AuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 
-
 export const authOptions: AuthOptions = {
 
     pages: {
@@ -28,9 +27,9 @@ export const authOptions: AuthOptions = {
                     method: "POST",
                     body: JSON.stringify(userObj)
                 })
-
                 const user = await res.json()
-                if (res.ok && user) {
+
+                if (res.ok && user && !user.error) {
                     return user
                 }
 

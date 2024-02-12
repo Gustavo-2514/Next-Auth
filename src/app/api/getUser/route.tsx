@@ -14,7 +14,7 @@ interface UserLoginType {
 export const POST = async (req: Request, res: NextResponse) => {
   const { email, password }: UserLoginType = await req.json();
   try {
-    console.log(process.env.API_USERS);
+
     const res = await fetch(`${process.env.API_USERS}/login`, {
       headers: {
         "Content-Type": "application/json",

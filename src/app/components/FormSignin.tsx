@@ -4,19 +4,17 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 
 import { redirect, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export default function FormLogin() {
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+
   const router = useRouter();
   const params = useSearchParams();
   const { status } = useSession();
 
-  // const router = Router
-  // const {callbackUrl} = router.query
-
   useEffect(() => {
-    console.log(status);
     status === "authenticated" ? redirect("/") : null;
   }, [status]);
 
@@ -67,6 +65,9 @@ export default function FormLogin() {
         {" "}
         Entrar{" "}
       </button>
+      <span>
+        Ainda Não possui conta?<Link className="text-blue-400" href={"/auth/signup"}> Registre-se</Link>
+      </span>
     </form>
   );
 }
