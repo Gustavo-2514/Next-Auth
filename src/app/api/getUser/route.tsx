@@ -1,47 +1,30 @@
-import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
-export interface User {
-  name: String;
-  email: String;
-  username: string;
+export interface UserReturnApiType {
+  msg: String;
+  token: String;
+  id: String;
 }
 
-export const POST = async (req: Request, res: Response) => {
-  const { email, name, username }: User = await req.json();
-  
-  
+interface UserLoginType {
+  email: String;
+  password: String;
+}
+
+export const POST = async (req: Request, res: NextResponse) => {
+  const { email, password }: UserLoginType = await req.json();
   try {
-    mongoose
-      .connect(`${process.env.URI_DB}`)
-      .then((res) => console.log("Conectado ao banco!"))
-      .catch((error) => console.log(error.message));
-
-    const User = mongoose.connection.collection("users");
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "Usuario não encontrado" },
-        { status: 404 }
-      );
-    }
-
-    // verificar a senha
-    // verificar a senha
-    // verificar a senha
-
-    mongoose.connection
-      .close()
-      .then((res) => console.log("Desconectado do banco!"))
-      .catch((error) => console.log(error.message));
-
+    console.log(process.env.API_USERS);
+    const res = await fetch(`${process.env.API_USERS}/login`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
+    const user: UserReturnApiType = await res.json();
     return NextResponse.json(user);
-
   } catch (error) {
-    return NextResponse.json(
-      { error: error.message  },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 };

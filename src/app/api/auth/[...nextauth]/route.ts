@@ -1,6 +1,6 @@
 import NextAuth, { AuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
-import { redirect } from 'next/navigation'
+
 
 export const authOptions: AuthOptions = {
 
@@ -8,29 +8,29 @@ export const authOptions: AuthOptions = {
         signIn: "/auth/signin"
     },
     secret: process.env.NEXTAUTH_SECRET,
-    session: { maxAge: 3600,  },
+    session: { maxAge: 3600, },
 
     providers: [
         Credentials({
-            name: "Credentials",
+            name: "credentials",
             credentials: {
                 email: { label: "Email", type: "text" },
                 password: { label: "Password", type: "password" }
             },
 
             async authorize(credentials, req) {
-                console.log(req.body)
+
+                const userObj = { email: credentials?.email, password: credentials?.password }
                 const res = await fetch('http://localhost:3000/api/getUser', {
                     headers: {
-                        "content-Type": "application/json",
+                        "Content-Type": "application/json",
                     },
                     method: "POST",
-                    body: JSON.stringify(credentials)
+                    body: JSON.stringify(userObj)
                 })
-                const user = await res.json()
-          
-                if (res.ok && user) {
 
+                const user = await res.json()
+                if (res.ok && user) {
                     return user
                 }
 

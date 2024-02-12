@@ -5,7 +5,7 @@ import "@/app/globals.css";
 export default function Home() {
   const {data } = useSession()
   return (
-    <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
+    <div className="flex justify-center my-5 gap-3">
       {
         data?.user ? <h1>Home User Authenticated</h1>: <h1>Home User not Authenticated</h1>
       }
